@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Cleaner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      max-width: 800px;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button {
+      margin: 10px 5px 10px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Markdown Cleaner</h1>
+  <p>Paste your Markdown below. This tool will remove trailing spaces and delete empty lines (lines that contain only whitespace), while preserving other newline characters.</p>
+  <textarea id="input" placeholder="Paste markdown here..."></textarea>
+  <br>
+  <button id="process">Clean Markdown</button>
+  <button id="copy">Copy Cleaned Markdown</button>
+  <br>
+  <textarea id="output" readonly placeholder="Cleaned markdown will appear here..."></textarea>
+
+  <script>
+    const inputEl = document.getElementById('input');
+    const outputEl = document.getElementById('output');
+
+    document.getElementById('process').addEventListener('click', function() {
+      const inputText = inputEl.value;
+      // Split into lines, remove trailing spaces, filter out empty lines
+      const cleanedLines = inputText
+        .split('\n')
+        .map(line => line.replace(/\s+$/, '')) // remove trailing whitespace
+        .filter(line => line.trim() !== '');   // remove lines that are empty
+      // Join back with newline
+      outputEl.value = cleanedLines.join('\n');
+    });
+
+    document.getElementById('copy').addEventListener('click', function() {
+      const text = outputEl.value;
+      if (!text) {
+        alert('Nothing to copy! Please clean the markdown first.');
+        return;
+      }
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert('Cleaned markdown copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Copy failed', err);
+          alert('Failed to copy to clipboard.');
+        });
+    });
+  </script>
+</body>
+</html>
